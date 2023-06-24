@@ -2,19 +2,21 @@ import React, { useEffect } from "react";
 import { ZoomMtg } from "@zoomus/websdk";
 
 let apiKeys = {
-  apiKey: process.env.REACT_APP_ZOOM_API_KEY,
-  apiSecret: process.env.REACT_APP_ZOOM_API_SECRET_KEY,
+  sdkKey: process.env.REACT_APP_ZOOM_API_KEY,
+  sdkSecret: process.env.REACT_APP_ZOOM_API_SECRET_KEY,
 };
+
 let meetConfig = {
-  apiKey: apiKeys.apiKey,
-  meetingNumber: "71289544336",
-  userName: "Example",
-  userEmail: "example@example.com", // must be the attendee email address
-  passWord: "0hZeCd",
-  role: 0,
+  sdkKey: apiKeys.sdkKey,
+  meetingNumber: "85000951723",
+  userName: "ghaith ar",
+  userEmail: "gaith00cm@gmail.com",
+  passWord: "fMby2g",
+  role: '0',
 };
 
 function App() {
+
   function joinMeeting(signature, meetConfig) {
     ZoomMtg.init({
       leaveUrl: "https://zoom.us/",
@@ -25,7 +27,7 @@ function App() {
           meetingNumber: meetConfig.meetingNumber,
           userName: meetConfig.userName,
           signature: signature,
-          apiKey: meetConfig.apiKey,
+          sdkKey: meetConfig.sdkKey,
           passWord: meetConfig.passWord,
 
           success: (success) => {
@@ -39,20 +41,16 @@ function App() {
       },
     });
   }
-  useEffect(() => {
-    ZoomMtg.setZoomJSLib("https://source.zoom.us/1.7.10/lib", "/av");
-    ZoomMtg.preLoadWasm();
-    ZoomMtg.prepareJssdk();
 
-    /**
-     * You should not visible api secret key on frontend
-     * Signature must be generated on server
-     * https://marketplace.zoom.us/docs/sdk/native-sdks/web/essential/signature
-     */
-    ZoomMtg.generateSignature({
+  useEffect(() => {
+    ZoomMtg.setZoomJSLib("https://source.zoom.us/2.13.0/lib", "/av");
+    ZoomMtg.preLoadWasm();
+    ZoomMtg.prepareWebSDK();
+
+    ZoomMtg.generateSDKSignature({
       meetingNumber: meetConfig.meetingNumber,
-      apiKey: meetConfig.apiKey,
-      apiSecret: apiKeys.apiSecret,
+      sdkKey: meetConfig.sdkKey,
+      sdkSecret: apiKeys.sdkSecret,
       role: meetConfig.role,
       success: function (res) {
         console.log("res", res);
